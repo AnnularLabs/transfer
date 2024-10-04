@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 	"transfer/api"
-	"transfer/util"
+	"transfer/utils"
 )
 
 func main() {
-	config, err := util.LoadConfig(".")
+	config, err := utils.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Failed to load config")
 	}

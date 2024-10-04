@@ -21,12 +21,16 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	router.GET("/helloTransfer", server.helloTransfer)
-	// router.POST("/song", server.song)
+	router.GET("/helloTransfer", server.HelloTransfer)
+	router.GET("/getNetEaseSongList", server.Netease)
 
 	server.router = router
 }
 
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
+}
+
+func errorResponse(err error) gin.H {
+	return gin.H{"error": err.Error()}
 }
