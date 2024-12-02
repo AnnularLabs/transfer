@@ -20,8 +20,6 @@ func NewServer() (*Server, error) {
 func (server *Server) setupRouter() {
 	router := gin.Default()
 	router.Use(cors.Default())
-
-	router.GET("/helloTransfer", server.HelloTransfer)
 	router.GET("/getNetEaseSongList", server.Netease)
 
 	server.router = router

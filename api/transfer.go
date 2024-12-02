@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"transfer/internal/netease"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,37 +11,27 @@ type NeteaseRequest struct {
 	PlaylistId string `json:"PlaylistId"`
 }
 
-type helloTransferResponse struct {
-	Message string `json:"message"`
-}
-
 type resultResponse struct {
 	Msg  string `json:"msg"`
 	Data any    `json:"data"`
 }
 
-func (server *Server) HelloTransfer(c *gin.Context) {
-	var req helloTransferResponse
-	req.Message = "Hello from transfer"
-	c.JSON(http.StatusOK, req)
-}
-
-func (server *Server) Netease(ctx *gin.Context) {
+func (server *Server) Netease(gtx *gin.Context) {
 	var req NeteaseRequest
-	result, _ := ctx.GetQuery("PlaylistId")
+	result, _ := gtx.GetQuery("PlaylistId")
 	if result == "" {
-		ctx.JSON(http.StatusBadRequest, "PlaylistId is required")
+		gtx.JSON(http.StatusBadRequest, "PlaylistId is required")
 		return
 	}
 	req.PlaylistId = result
-	musicList, err := GetPlayListMusic(req.PlaylistId)
+	musicList, err := netease.NeteaseService.GetPlayListMusic(gtx.Request.Context(), req.PlaylistId)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		gtx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 	res := &resultResponse{
 		Msg:  "success",
 		Data: musicList,
 	}
-	ctx.JSON(http.StatusOK, res)
+	gtx.JSON(http.StatusOK, res)
 }
