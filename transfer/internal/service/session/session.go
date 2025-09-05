@@ -37,8 +37,6 @@ func NewMemorySessionManager() SessionManager {
 }
 
 func (m *MemorySessionManager) getSessionKey(c *gin.Context) string {
-	// 简单使用 client IP + User-Agent 作为 session key
-	// 生产环境应该使用更安全的方式，如 JWT 或 secure cookie
 	return fmt.Sprintf("%s_%s", c.ClientIP(), c.GetHeader("User-Agent"))
 }
 
@@ -49,7 +47,6 @@ func (m *MemorySessionManager) SetSession(c *gin.Context, data *SessionData) err
 	key := m.getSessionKey(c)
 	m.sessions[key] = data
 
-	// 设置 cookie（可选，用于前端识别登录状态）
 	c.SetCookie("session_id", "authenticated", 3600, "/", "", false, true)
 
 	return nil

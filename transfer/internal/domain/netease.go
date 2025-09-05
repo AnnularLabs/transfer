@@ -1,7 +1,6 @@
 package domain
 
 // Track 代表一首歌曲的完整信息
-// 好的数据结构消除特殊情况
 type Track struct {
 	Title  string `json:"title"`
 	Artist string `json:"artist"`

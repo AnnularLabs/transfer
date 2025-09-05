@@ -205,13 +205,6 @@ func (s *SpotifyOAuth) RevokeToken(userID string) error {
 	return s.tokenManager.DeleteUserToken(userID)
 }
 
-// // SpotifyAuth 保持向后兼容的旧版本（用于应用级别的操作）
-// type SpotifyAuth struct {
-// 	ClientID     string
-// 	ClientSecret string
-// 	TokenURL     string
-// }
-
 func NewSpotifyAuth(clientID, clientSecret string) spotify.Client {
 	authConfig := &clientcredentials.Config{
 		ClientID:     clientID,
