@@ -57,8 +57,6 @@ func (n *neteaseService) GetPlaylist(ctx context.Context, nid int64) (*domain.Mu
 	return n.convertToMusicList(&apiResp), nil
 }
 
-// convertToMusicList 将 API 响应转换为领域对象
-// 好品味：数据转换逻辑独立，可测试
 func (n *neteaseService) convertToMusicList(resp *PlaylistResponse) *domain.MusicList {
 	tracks := make([]domain.Track, 0, len(resp.Playlist.Tracks))
 
@@ -92,7 +90,6 @@ func (n *neteaseService) convertToMusicList(resp *PlaylistResponse) *domain.Musi
 
 // buildMatchKey 构建用于匹配的键
 func buildMatchKey(title, artist string) string {
-	// 简单的标准化：去除空格，转小写
 	key := strings.ToLower(strings.TrimSpace(title))
 	if artist != "" {
 		key += "|" + strings.ToLower(strings.TrimSpace(artist))
