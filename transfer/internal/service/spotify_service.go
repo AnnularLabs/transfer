@@ -10,7 +10,6 @@ import (
 	"github.com/zmb3/spotify"
 )
 
-// 常量定义，消除魔数
 const (
 	SpotifyBatchLimit = 100
 )
@@ -22,7 +21,6 @@ var (
 type SpotifyService interface {
 	GetUserInfo(ctx context.Context, userID string) (string, error)
 	GetPlaylistsForUser(ctx context.Context, userID string) ([]*PlaylistInfo, error)
-	// 重新设计：返回详细结果，不静默忽略错误
 	TransferTracksWithUserClient(ctx context.Context, client spotify.Client, playlistID string, tracks []domain.Track) (*domain.TransferResult, error)
 }
 
@@ -87,7 +85,7 @@ func (s *spotifyService) TransferTracksWithUserClient(ctx context.Context, clien
 		SuccessTracks: make([]string, 0),
 	}
 
-	// 批量处理，消除特殊情况
+	// 批量处理
 	for i := 0; i < len(tracks); i += SpotifyBatchLimit {
 		end := i + SpotifyBatchLimit
 		if end > len(tracks) {
@@ -101,7 +99,6 @@ func (s *spotifyService) TransferTracksWithUserClient(ctx context.Context, clien
 	return result, nil
 }
 
-// processBatch 处理一批歌曲
 func (s *spotifyService) processBatch(ctx context.Context, client spotify.Client, playlistID string, tracks []domain.Track, result *domain.TransferResult) {
 	trackIDs := make([]spotify.ID, 0, len(tracks))
 
@@ -159,7 +156,6 @@ func (s *spotifyService) searchTrack(ctx context.Context, track domain.Track) (s
 }
 
 // buildSearchQuery 构建搜索查询字符串
-// 好品味：将复杂的字符串构建逻辑隔离
 func buildSearchQuery(track domain.Track) string {
 	var parts []string
 
